@@ -1,0 +1,33 @@
+// SPDX-License-Identifier: MIT third program
+pragma solidity ^0.8.0;
+
+contract BankAccount {
+    address public owner;
+    uint public balance;
+
+    constructor() {
+        owner = msg.sender;
+        balance = 0;
+    }
+
+    // Deposit money in Ether
+    function deposit() public payable {
+        require(msg.value > 0, "Deposit must be greater than zero");
+        balance += msg.value;
+    }
+
+    // Withdraw money in Ether
+    function withdraw(uint amount) public {
+        require(msg.sender == owner, "Only owner can withdraw");
+        require(amount > 0, "Amount must be greater than zero");
+        require(balance >= amount * 1 ether, "Insufficient balance");
+
+        balance -= amount * 1 ether;
+        payable(owner).transfer(amount * 1 ether);
+    }
+
+    // Show balance in Ether
+    function showBalance() public view returns (uint) {
+        return balance / 1 ether;
+    }
+}
